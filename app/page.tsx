@@ -1,4 +1,5 @@
-import Image from "next/image";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import Todolist from "@/components/Todolist";
 import AddTodo from "@/components/AddTodo";
 
