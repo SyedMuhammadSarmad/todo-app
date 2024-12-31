@@ -6,10 +6,8 @@ await client.sql`INSERT INTO todos(task) values('sleep')`
 */
 
 import { NextRequest, NextResponse } from "next/server";
-import { Todo,NewTodo,todoTable } from "@/app/lib/drizzle";
+import { db,todoTable } from "@/app/lib/drizzle";
 import { sql,eq } from "drizzle-orm";
-import { error } from "console";
-import { db } from "@/app/lib/drizzle";
 
 export async function  GET(){
     
