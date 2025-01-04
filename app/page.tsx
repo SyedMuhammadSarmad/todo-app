@@ -1,6 +1,5 @@
 import Todolist from "@/components/Todolist";
 import AddTodo from "@/components/AddTodo";
-
 export default function Home() {
   return (
     <main className=" bg-gradient-to-tr from-secondary to-primary h-screen flex justify-center items-center">
