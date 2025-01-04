@@ -7,7 +7,7 @@ await client.sql`INSERT INTO todos(task) values('sleep')`
 
 import { NextRequest, NextResponse } from "next/server";
 import { db,todoTable } from "@/app/lib/drizzle";
-import { sql,eq } from "drizzle-orm";
+import { sql,eq, or } from "drizzle-orm";
 
 export async function  GET(){
     
@@ -16,7 +16,7 @@ export async function  GET(){
         await sql`CREATE TABLE IF NOT EXISTS todos(id SERIAL, task varchar(255))`//error throw [error: relation "todos" already exists] IF NOT EXISTS is not written
         
         const data = await db.select().from(todoTable).execute();
-        return NextResponse.json({messsage : data});
+        return NextResponse.json({message : data});
     }
     catch(error){
         return NextResponse.json({message:"error"}) //json
@@ -45,12 +45,19 @@ export async function  POST(req:NextRequest){
 
 export async function DELETE(req:NextRequest){
         try{
-            const data:{task:string} = await req.json()
-            await db.delete(todoTable).where(eq(todoTable.task,data.task))
-            return NextResponse.json({message : `${data.task} entry deleted`})
+            const {id}:{id:number}= await req.json()
+            if(typeof(id)!= "number" || id<=0){
+                return NextResponse.json({message : `invalid id`},{status:400})
+            }
+            const result = await db.delete(todoTable).where(eq(todoTable.id,id))
+            if(result.rowCount==0){
+                return(NextResponse.json({message:"task not found"},{status:404}))
+            }
+
+            return NextResponse.json({message : `${id} entry deleted`})
         }
         catch(error:any){
-            return NextResponse.json({message: error.message})
+            return NextResponse.json({message: error.message},{status:500})
         }
         
 
