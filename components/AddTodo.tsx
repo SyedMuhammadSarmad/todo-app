@@ -24,9 +24,9 @@ const AddTodo = () => {
           body:JSON.stringify({ task:task.task}),
           }
         )
-        
+        setTask(null);
+        refresh();
       }
-      refresh();
 
     }
     catch(error){
