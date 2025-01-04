@@ -1,5 +1,6 @@
+'use client'
 import { Todo } from "@/app/lib/drizzle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const getData = async () => {
@@ -18,7 +19,7 @@ const getData = async () => {
       }
 
       const result = await res.json();
-      return result.message || [];
+      return result.message ;
       
   } catch (err) {
       console.error('Error fetching data:', err);
@@ -27,13 +28,21 @@ const getData = async () => {
 }
 
 
-const Todolist = async () => {
-  const tasks:Todo[]= await getData();
+const Todolist = () => {
+  const [tasks, setTasks] = useState<Todo[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const tasks = await getData();
+      setTasks(tasks);
+    };
+    
+    fetchData();
+  }, []); // Empty dependency array ensures this runs once when the component mounts
   console.log(tasks)
   
   return (
     <>
-    {tasks && Array.isArray(tasks) && tasks.map((item)=>
+    {tasks.map((item)=>
         {return(
           <div key={item.id} className="flex justify-center items-center gap-x-5 ">
             <div className="bg-slate-100 p-4 rounded-lg flex items-center gap-x-10 my-5 shadow w-full">

@@ -18,9 +18,13 @@ const AddTodo = () => {
           "/api/todo",
           {
           method :"POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body:JSON.stringify({ task:task.task}),
           }
         )
+        
       }
       refresh();
 
