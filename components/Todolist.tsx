@@ -18,10 +18,11 @@ const getData = async () => {
       }
 
       const result = await res.json();
-      return result.message;
+      return result.message || [];
       
   } catch (err) {
       console.error('Error fetching data:', err);
+      return [];
     }
 }
 
@@ -32,7 +33,7 @@ const Todolist = async () => {
   
   return (
     <>
-    {tasks.map((item)=>
+    {tasks && Array.isArray(tasks) && tasks.map((item)=>
         {return(
           <div key={item.id} className="flex justify-center items-center gap-x-5 ">
             <div className="bg-slate-100 p-4 rounded-lg flex items-center gap-x-10 my-5 shadow w-full">
