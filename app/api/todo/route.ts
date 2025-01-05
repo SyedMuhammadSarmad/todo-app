@@ -19,29 +19,29 @@ export async function  GET(){
         return NextResponse.json({message : data});
     }
     catch(error){
-        return NextResponse.json({message:"error"}) //json
-        //return new NextResponse("something wrong") //text message
+        return NextResponse.json({message:"error"}) 
 
     }
 }
 
-export async function  POST(req:NextRequest){
-    const data:{task:string} = await req.json()
-    try{
-        if(data.task){
-            await db.insert(todoTable).values({     task : data.task    })
-            return NextResponse.json({message : `${data.task} task added`})
-        }
-        else{
-            throw new Error("Task field is missing or undefine task")
-        }
+export async function POST(req: NextRequest) {
+    try {
+      const data: { task: string } = await req.json();
+  
+      if (!data.task) {
+        throw new Error("Task field is missing or undefined.");
+      }
+  
+      const insertedTask = await db.insert(todoTable).values({ task: data.task }).returning()
+  
+      return NextResponse.json({
+        message: `${data.task} task added`,
+        task: insertedTask[0],
+      });
+    } catch (error: any) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
     }
-    catch(error:any){
-
-        return NextResponse.json({message: error.message});
-    } 
-
-}
+  }
 
 export async function DELETE(req:NextRequest){
         try{
